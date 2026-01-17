@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Power Plants</title>
+<!-- responsive viewport for mobile devices -->
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- main container uses CSS grid for layout -->
+<div id="container">
+  <!-- dark header bar with title and control buttons -->
+  <header id="header">
+    <h1>Power Plants Around The World</h1>
+    <div class="controls-row">
+      <button id="reset-zoom">Reset Map Zoom</button>
+      <button id="clear-filters">Clear All Filters</button>
+    </div>
+  </header>
+
+  <!-- three kpi cards showing current filter stats -->
+  <div id="kpi-row">
+    <!-- total megawatts of filtered plants -->
+    <div class="kpi-card card-style" id="kpi-capacity">
+      <div class="kpi-title">Total Capacity (MW)</div>
+      <div class="kpi-value" id="kpi-capacity-value">0</div>
+    </div>
+    <!-- count of filtered plants -->
+    <div class="kpi-card card-style" id="kpi-plants">
+      <div class="kpi-title">Total Plants</div>
+      <div class="kpi-value" id="kpi-plants-value">0</div>
+    </div>
+    <!-- currently selected fuel type or "all" -->
+    <div class="kpi-card card-style" id="kpi-fuel-type">
+      <div class="kpi-title">Selected Fuel Type</div>
+      <div class="kpi-value" id="kpi-fuel-value">ALL</div>
+    </div>
+  </div>
+
+  <!-- world map shows country bubbles when zoomed out, individual plants when zoomed in -->
+  <div id="map" class="card-style">
+    <!-- floating banner shows filter status and hover info -->
+    <div id="info">Loading data...</div>
+  </div>
+
+  <!-- right panel with two stacked charts -->
+  <div id="charts-panel">
+    <!-- interactive bubble chart for filtering by fuel type -->
+    <div id="fuel-chart" class="card-style">
+      <div class="chart-header">Fuel Type Distribution (Capacity Share)</div>
+    </div>
+    <!-- stacked bar chart with brush for year range selection -->
+  </div>
+
+  <div id="timeline" class="card-style">
+      <div class="chart-header">Commissioning Timeline (Capacity by Fuel Type)</div>
+    </div>
+</div>
+
+
+<!-- d3 library for data visualization -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<!-- topojson library for efficient map data -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script type="module" src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+/* reset browser defaults so everything starts from a clean slate */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* use system fonts for native look and full viewport height */
+html, body { 
+  height: 100%; 
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  background: #f4f7f9;
+}
+
+/* grid layout: map gets 2 parts, charts get 1.5 parts of width */
+#container { 
+  display: grid;
+  grid-template-columns: 2fr 1.5fr; 
+  grid-template-rows: auto auto 1.5fr 1fr;
+  height: 100vh;
+  gap: 16px;
+  padding: 16px;
+}
+
+/* header and kpi row span full width across both columns */
+#header { grid-column: 1 / 3; }
+#kpi-row { grid-column: 1 / 3; }
+
+/* map takes left column of main content area */
+#map { 
+  grid-column: 1;
+  grid-row: 3;
+  position: relative;
+  background: white;
+  min-height: 400px;
+}
+
+/* charts panel takes right column and stacks vertically */
+#charts-panel {
+  grid-column: 2;
+ grid-row: 3; /* First content row, right column */
+ display: flex;
+ flex-direction: column;
+ gap: 16px;
+ min-height: 0;/* allow flex children to shrink below content size */
+}
+
+/* fuel chart gets 2 parts, timeline gets 1 part of vertical space */
+#fuel-chart {
+    flex: 1; 
+}
+
+#timeline {
+    grid-column: 1 / 3; /* Span full width across both columns */
+    grid-row: 4; /* The new last row */
+    flex: unset; /* Remove flex sizing as it's a grid item now */
+    min-height: 250px;
+}
+
+/* shared card styling for all panels */
+.card-style {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  min-height: 0; /* allow content to shrink in flex/grid */
+}
+
+/* dark header bar with controls on the right */
+#header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: #2f323b;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#header h1 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* map needs relative positioning for the info banner overlay */
+#map { 
+  position: relative;
+  background: white;
+  min-height: 400px;
+}
+
+/* floating info banner that shows filter status and hover details */
+#info {
+  position: absolute;
+  top: 16px; 
+  left: 50%;
+  transform: translateX(-50%); /* center horizontally */
+  padding: 8px 16px;
+  background: #fffbe6; /* light yellow background */
+  border: 1px solid #fde68a;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #92400e; 
+  text-align: center;
+  z-index: 10; /* float above map elements */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  min-width: 40%;
+  white-space: nowrap; /* keep text on one line */
+}
+
+/* button group in header */
+.controls-row {
+  display: flex;
+  gap: 10px;
+}
+
+/* kpi cards layout: equal width columns */
+#kpi-row {
+  display: flex;
+  gap: 16px;
+}
+
+.kpi-card {
+  flex: 1;
+  text-align: center;
+  padding: 12px 16px;
+  min-width: 0; /* allow text truncation */
+}
+
+/* small uppercase label for kpi cards */
+.kpi-title {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* big number display for kpi values */
+.kpi-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* show ... if too long */
+}
+
+/* header text for each chart */
+.chart-header {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+/* make svg fill its container */
+svg { 
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* base style for country boundaries on map */
+.country { 
+  fill: #e5e7eb;
+  stroke: #fff;
+  stroke-width: 0.5;
+  transition: fill 0.2s;
+}
+
+/* slightly darker on hover for feedback */
+.country:hover { fill: #d1d5db; }
+
+/* individual plant points when zoomed in */
+.plant { 
+  opacity: 0.7;
+  stroke: #fff;
+  stroke-width: 0.4;
+}
+
+/* country-level aggregated bubbles when zoomed out */
+.country-bubble { 
+  fill: #404e00; /* dark olive green */
+  opacity: 0.85;
+  stroke: #fff;
+  stroke-width: 1;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* fuel type bubbles in the bubble chart */
+.fuel-bubble { 
+  stroke: #fff;
+  stroke-width: 2;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* brighten and thicken border on hover */
+.fuel-bubble:hover {
+  filter: brightness(1.15);
+  stroke-width: 2.5;
+}
+
+/* darker thicker border when fuel type is selected */
+.fuel-bubble.selected { 
+  stroke: #1f2937;
+  stroke-width: 3.5;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* text labels inside fuel bubbles */
+.fuel-label {
+  font-size: 12px;
+  font-weight: 500;
+  fill: #fff;
+  text-anchor: middle;
+  pointer-events: none; /* let clicks pass through to bubble */
+  text-shadow: 0 0 4px rgba(0,0,0,0.8); /* readable on colored background */
+}
+
+/* bars in the timeline chart */
+.bars rect {
+    opacity: 0.85;
+}
+
+/* brush selection area styling */
+.brush .selection { 
+  fill: #3b82f6;
+  opacity: 0.3;
+  stroke: #3b82f6;
+  stroke-width: 1;
+}
+
+/* axis label text */
+.axis text {
+  font-size: 11px;
+  fill: #666;
+}
+
+/* axis lines and paths */
+.axis line,
+.axis path {
+  stroke: #ccc;
+}
+
+/* button styling for header controls */
+button { 
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #374151;
+}
+
+/* subtle hover effect for buttons */
+button:hover {
+  background: #f9fafb;
+  border-color: #999;
+}
+
+/* slight press effect when clicking */
+button:active {
+  transform: scale(0.98);
+}

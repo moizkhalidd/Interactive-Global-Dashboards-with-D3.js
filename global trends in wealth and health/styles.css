@@ -1,0 +1,288 @@
+/* reset browser defaults so everything starts from a clean slate */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* use system fonts for native look and full viewport height */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    background: #f4f7f9;
+    height: 100vh;
+}
+
+/* grid layout: 2 columns, 4 rows (header, kpis, two chart rows) */
+#container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* equal width columns */
+    grid-template-rows: auto auto 1fr 1fr; /* header and kpis auto-size, charts split remaining space */
+    height: calc(100vh - 32px);
+    gap: 16px;
+    padding: 16px;
+}
+
+/* header and kpi row span full width across both columns */
+#header-controls { grid-column: 1 / 3;}
+#kpi-row { grid-column: 1 / 3; }
+
+/* motion chart takes left column of first chart row */
+#motion-chart-panel { grid-column: 1; grid-row: 3; min-height: 300px; } 
+
+/* hierarchy chart takes right column of first chart row */
+#hierarchy-chart-panel { grid-column: 2; grid-row: 3; min-height: 300px; } 
+
+/* map chart spans full width in second chart row */
+#map-chart-panel { 
+    grid-column: 1 / 3; grid-row: 4; min-height: 350px; 
+} 
+
+/* shared card styling for all panels */
+.card-style {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+#map-legend {
+    position: absolute;
+    bottom: 16px;
+    left: 20px;
+    background: rgba(255,255,255,0.9);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.legend-bar {
+    width: 160px;
+    height: 12px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+}
+
+.legend-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 160px;
+}
+
+/* dark header bar with year controls */
+#header-controls {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 24px;
+    background: #2f323b;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#header-controls h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* horizontal layout for play button, year display, and slider */
+.controls-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* large year display in the center */
+#year-display {
+    font-size: 40px;
+    font-weight: 700;
+    color: #ffffff;
+    min-width: 100px;
+    text-align: center;
+    padding: 5px 0;
+}
+
+/* green play/pause button */
+#play-btn {
+    padding: 10px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background: #10b981;
+    color: white;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+#play-btn:hover { background: #059669; }
+
+/* custom slider container */
+#slider-container {
+    flex: 1;
+    position: relative;
+    height: 40px;
+}
+
+/* slider track background */
+#year-slider {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    background: #555866;
+    border-radius: 3px;
+    top: 17px;
+    cursor: pointer;
+}
+
+/* draggable slider handle */
+#slider-handle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #3b82f6;
+    border-radius: 50%;
+    cursor: grab;
+    top: 10px;
+    margin-left: -10px; /* center on the track */
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+/* kpi cards layout: equal width columns */
+#kpi-row {
+    display: flex;
+    gap: 16px;
+}
+
+.kpi-card {
+    flex: 1;
+    text-align: center;
+    padding: 12px 16px;
+    min-width: 0;
+}
+
+/* small uppercase label for kpi cards */
+.kpi-title {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* big number display for kpi values */
+.kpi-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1f2937;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* header text for each chart */
+.chart-header {
+    font-size: 18px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+/* all svgs fill available space minus header height */
+#motion-chart, #hierarchy-chart, #map-chart { 
+    height: calc(100% - 33px); /* subtract header and margin */
+    width: 100%; 
+    display: block;
+}
+
+/* country paths in the map */
+.country { 
+    stroke: #333; 
+    stroke-width: 0.5px; 
+    transition: fill 0.2s, stroke-width 0.2s;
+}
+
+/* thicker border on hover for feedback */
+.country:hover { stroke-width: 2px; }
+
+/* bubbles in the motion chart */
+.bubble { 
+    stroke: #333; 
+    stroke-width: 1px; 
+    fill-opacity: 0.8; 
+    transition: r 0.2s, cx 0.2s, cy 0.2s;
+}
+
+/* brighter and thicker border on hover */
+.bubble:hover { fill-opacity: 1; stroke-width: 2px; }
+
+/* dimmed class for highlighting interactions */
+.dimmed { opacity: 0.15 !important; }
+
+/* axis label text styling */
+.axis text {
+    font-size: 12px;
+    fill: #6b7280;
+}
+
+/* axis lines and paths */
+.axis path, .axis line {
+    stroke: #d1d5db;
+}
+
+/* arcs in the sunburst chart */
+.arc {
+    cursor: pointer;
+    transition: fill 0.2s;
+}
+
+/* floating tooltip for all charts */
+.tooltip {
+    position: absolute;
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.85);
+    color: white;
+    border-radius: 6px;
+    pointer-events: none; /* let mouse events pass through */
+    font-size: 13px;
+    opacity: 0;
+    z-index: 1000;
+    line-height: 1.5;
+}
+
+/* legend for sunburst chart regions */
+#hierarchy-legend {
+    position: absolute;
+    top: 50%; 
+    right: 10px; 
+    transform: translateY(-50%); /* center vertically */
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    max-height: 90%;
+    overflow-y: auto;
+    z-index: 10; 
+}
+
+/* individual legend items */
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #374151;
+}
+
+/* colored circle for each region */
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+    border: 1px solid #ccc;
+    flex-shrink: 0;
+}

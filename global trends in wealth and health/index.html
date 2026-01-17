@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <!-- responsive viewport for mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>World Data</title>
+    <!-- d3 library for data visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <!-- topojson library for efficient map data -->
+    <script src="https://unpkg.com/topojson@3"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- main container uses CSS grid for layout -->
+    <div id="container">
+
+        <!-- dark header bar with title and year controls -->
+        <div id="header-controls">
+            <h1>World Data</h1>
+            <div class="controls-row">
+                <!-- play/pause button for animation -->
+                <button id="play-btn">Play</button>
+                <!-- large year display -->
+                <div id="year-display">1950</div>
+                <!-- custom slider for year selection -->
+                <div id="slider-container">
+                    <div id="year-slider"></div>
+                    <div id="slider-handle"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- three kpi cards showing current year stats -->
+        <div id="kpi-row">
+            <!-- total population across all countries -->
+            <div class="kpi-card card-style">
+                <div class="kpi-title">Total Population</div>
+                <div class="kpi-value" id="kpi-pop-value">N/A</div>
+            </div>
+            <!-- average life expectancy across countries -->
+            <div class="kpi-card card-style">
+                <div class="kpi-title">Average Life Expectancy</div>
+                <div class="kpi-value" id="kpi-life-value">N/A</div>
+            </div>
+            <!-- median gdp per capita (median because log scale) -->
+            <div class="kpi-card card-style">
+                <div class="kpi-title">Median GDP per Capita</div>
+                <div class="kpi-value" id="kpi-gdp-value">N/A</div>
+            </div>
+        </div>
+
+        <!-- bubble chart showing gdp vs life expectancy with population as size -->
+        <div id="motion-chart-panel" class="card-style">
+            <div class="chart-header">Life Expectancy vs. GDP (Size by Population)</div>
+            <svg id="motion-chart"></svg>
+        </div>
+        
+        <!-- sunburst chart showing hierarchical population by region -->
+        <div id="hierarchy-chart-panel" class="card-style">
+            <div class="chart-header">Population by Region (Sunburst Chart)</div>
+            <!-- legend showing region colors -->
+            <div id="hierarchy-legend"></div> 
+            <svg id="hierarchy-chart"></svg>
+        </div>
+        
+        <!-- world map colored by life expectancy -->
+        <div id="map-chart-panel" class="card-style">
+            <div class="chart-header">Life Expectancy by Country</div>
+            <svg id="map-chart"></svg>
+            <div id="map-legend"></div>
+        </div>
+
+    </div>
+
+    <!-- floating tooltip for all charts -->
+    <div class="tooltip" id="tooltip"></div>
+
+    <!-- our application entry point as ES6 module -->
+    <script type="module" src="main.js"></script>
+</body>
+</html>
